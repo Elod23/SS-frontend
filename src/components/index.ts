@@ -1,0 +1,1 @@
+/* ide jonne majd a komponensek */
