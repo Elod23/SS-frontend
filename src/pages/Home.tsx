@@ -26,8 +26,8 @@ const style = {
 };
 
 export default function Home() {
-  const { email, setEmail,  password, setPassword, orderId, storeId, isOpen, handleClose, login } =
-    useHomeEffects();
+  const { email, setEmail, password, setPassword, orderId, storeId, isOpen, handleClose, login, pickupAddress, setPickupAddress} =
+  useHomeEffects();
 
   return (
     <div
@@ -77,6 +77,15 @@ export default function Home() {
           </div>
         </FormGroup>
         <Divider style={{ marginTop: "5%", marginBottom: "5%" }} />
+        <FormControl fullWidth>
+          <InputLabel htmlFor="pickup-address">Pickup Address</InputLabel>
+          <Input
+            id="pickup-address"
+            aria-describedby="pickup-address"
+            value={pickupAddress}
+            fullWidth
+          />
+        </FormControl>
         {isOpen && (
           <Modal
             open={isOpen}
