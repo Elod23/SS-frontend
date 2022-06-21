@@ -8,7 +8,9 @@ import {
   FormGroup,
   Modal,
   Box,
-  Button
+  Button,
+  Checkbox,
+  FormControlLabel
 } from "@mui/material";
 import { SSLogo } from "../components";
 import { useHomeEffects, Credentials } from "./Home.effects";
@@ -26,8 +28,21 @@ const style = {
 };
 
 export default function Home() {
-  const { email, setEmail, password, setPassword, orderId, storeId, isOpen, handleClose, login, pickupAddress, setPickupAddress} =
-  useHomeEffects();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    orderId,
+    storeId,
+    isOpen,
+    handleClose,
+    login,
+    pickupAddress,
+    setPickupAddress,
+    deliveryAddress,
+    setDeliveryAddress,
+  } = useHomeEffects();
 
   return (
     <div
@@ -76,16 +91,39 @@ export default function Home() {
             </FormControl>
           </div>
         </FormGroup>
-        <Divider style={{ marginTop: "5%", marginBottom: "5%" }} />
-        <FormControl fullWidth>
-          <InputLabel htmlFor="pickup-address">Pickup Address</InputLabel>
-          <Input
-            id="pickup-address"
-            aria-describedby="pickup-address"
-            value={pickupAddress}
-            fullWidth
-          />
-        </FormControl>
+        <Divider style={{ marginTop: "3%", marginBottom: "3%" }} />
+        <FormGroup>
+          <FormControl fullWidth>
+            <InputLabel htmlFor="pickup-address">Pickup Address</InputLabel>
+            <Input
+              id="pickup-address"
+              aria-describedby="pickup-address"
+              value={pickupAddress}
+              onChange={(e) => {
+                setPickupAddress(e.target.value);
+              }}
+              fullWidth
+            />
+          </FormControl>
+          <FormControl fullWidth style={{ marginTop: "3%" }}>
+            <InputLabel htmlFor="delivery-address">Delivery Address</InputLabel>
+            <Input
+              id="delivery-address"
+              aria-describedby="delivery-address"
+              value={deliveryAddress}
+              onChange={(e) => {
+                setDeliveryAddress(e.target.value);
+              }}
+              fullWidth
+            />
+          </FormControl>
+          <div>
+            <FormControlLabel style={{ color: 'black' }}
+            control={<Checkbox />}
+            label="I have these items in inventory."
+            />
+          </div>
+        </FormGroup>
         {isOpen && (
           <Modal
             open={isOpen}
@@ -101,25 +139,38 @@ export default function Home() {
                     id="email"
                     aria-describedby="Your SalvageScout email address"
                     value={email}
-                    onChange={(e) => { setEmail(e.target.value)}}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
                     fullWidth
                   />
                   <FormHelperText style={{ marginBottom: "5%" }}>
                     The email address you use to log into SalvageScout.
                   </FormHelperText>
                 </FormControl>
-                <FormControl fullWidth style={{ marginLeft: "2%", marginBottom: '5%' }}>
+                <FormControl fullWidth style={{ marginBottom: "5%" }}>
                   <InputLabel htmlFor="password">Password</InputLabel>
                   <Input
                     id="password"
                     aria-describedby="Your SalvageScout password"
                     value={password}
-                    onChange={(e) => { setPassword(e.target.value)}}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
                     fullWidth
                     type="password"
                   />
-                </FormControl >
-                <Button onClick={() => { login({email, password, storeId } as Credentials)}} variant='outlined' color="info">Login</Button>
+                </FormControl>
+                <Button
+                  type="submit"
+                  onClick={() => {
+                    login({ email, password, storeId } as Credentials);
+                  }}
+                  variant="outlined"
+                  color="info"
+                >
+                  Login
+                </Button>
               </FormGroup>
             </Box>
           </Modal>
