@@ -1,0 +1,1 @@
+export const encrissBaseUrl = process.env.REACT_APP_ENCRISS_BASE_URL|| '';
