@@ -17,7 +17,7 @@ export const useHomeEffects = () => {
   const [isOpen, setOpen] = useState(true);
   const [pickupAddress, setPickupAddress] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
-  const [items, setItems] = useState("");
+  const [items, setItems] = useState([{}]);
   const [checked, setChecked] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [loginErrorMessage, setLoginErrorMessages] = useState("");
