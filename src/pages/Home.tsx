@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { SSLogo } from "../components";
 import { useHomeEffects, Credentials } from "./Home.effects";
+import { alignProperty } from "@mui/material/styles/cssUtils";
 
 const style = {
   position: "absolute" as "absolute",
@@ -42,6 +43,8 @@ export default function Home() {
     setPickupAddress,
     deliveryAddress,
     setDeliveryAddress,
+    checked,
+    handleCheck
   } = useHomeEffects();
 
   return (
@@ -117,13 +120,32 @@ export default function Home() {
               fullWidth
             />
           </FormControl>
+              //The items table comes here
           <div>
-            <FormControlLabel style={{ color: 'black' }}
-            control={<Checkbox />}
-            label="I have these items in inventory."
+            <FormControlLabel
+              style={{ color: "black" }}
+              control={
+                <Checkbox
+                checked={checked}
+                  onChange={(e) => {
+                    handleCheck(checked);
+                  }} />}
+              label="I have these items in inventory."
             />
           </div>
         </FormGroup>
+        <Button
+          disabled={!checked}
+          variant="contained"
+          type="submit"
+
+          onClick={() => {
+            login({ email, password, storeId } as Credentials);
+          }}
+          color="info"
+        >
+          Create Shipment
+        </Button>
         {isOpen && (
           <Modal
             open={isOpen}
@@ -166,8 +188,9 @@ export default function Home() {
                   onClick={() => {
                     login({ email, password, storeId } as Credentials);
                   }}
-                  variant="outlined"
+                  variant="contained"
                   color="info"
+                  style={{ display: "flex"}}
                 >
                   Login
                 </Button>

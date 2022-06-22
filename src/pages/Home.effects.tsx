@@ -18,7 +18,7 @@ export const useHomeEffects = () => {
   const [pickupAddress, setPickupAddress] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [items, setItems] = useState("");
-
+  const [checked, setChecked] = useState(false);
   const {
     setLogged,
     setAuthToken,
@@ -81,7 +81,7 @@ export const useHomeEffects = () => {
           ", " +
           dAddress.zipCode
       );
-      setItems(items.productName)
+      setItems(items);
 
 
 
@@ -123,6 +123,11 @@ export const useHomeEffects = () => {
     }
   };
 
+  const handleCheck = (checked: boolean) => {
+    setChecked(!checked)
+    console.log(checked)
+  }
+
   return {
     email,
     setEmail,
@@ -136,6 +141,9 @@ export const useHomeEffects = () => {
     pickupAddress,
     setPickupAddress,
     deliveryAddress,
-    setDeliveryAddress
+    setDeliveryAddress,
+    items,
+    checked,
+    handleCheck
   };
 };
