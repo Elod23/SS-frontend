@@ -19,6 +19,8 @@ export const useHomeEffects = () => {
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [items, setItems] = useState("");
   const [checked, setChecked] = useState(false);
+  const [loginError, setLoginError] = useState(false);
+  const [loginErrorMessage, setLoginErrorMessages] = useState("");
   const {
     setLogged,
     setAuthToken,
@@ -120,6 +122,8 @@ export const useHomeEffects = () => {
       handleClose();
     } else {
       setLogged(false);
+      setLoginError(true)
+      setLoginErrorMessages("Email or password is incorrect")
     }
   };
 
@@ -127,6 +131,8 @@ export const useHomeEffects = () => {
     setChecked(!checked)
     console.log(checked)
   }
+
+
 
   return {
     email,
@@ -144,6 +150,8 @@ export const useHomeEffects = () => {
     setDeliveryAddress,
     items,
     checked,
-    handleCheck
+    handleCheck,
+    loginError,
+    loginErrorMessage
   };
 };
