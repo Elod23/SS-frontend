@@ -5,7 +5,7 @@ export default function Root() {
     return (
         <div className="container">
             <h1>Root</h1>
-            <SSLogo/>
+            <SSLogo small={false}/>
         </div>
     );
 }

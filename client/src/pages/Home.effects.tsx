@@ -17,8 +17,9 @@ export const useHomeEffects = () => {
   const [isOpen, setOpen] = useState(true);
   const [pickupAddress, setPickupAddress] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
-  const [items, setItems] = useState("");
-  const [checked, setChecked] = useState(false);
+  const [items, setItems] = useState([]);
+  const [addressCorrect, setAddressCorrect] = useState(false);
+  const [itemListCorrect, setItemListCorrect] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [loginErrorMessage, setLoginErrorMessages] = useState("");
   const {
@@ -124,11 +125,6 @@ export const useHomeEffects = () => {
     }
   };
 
-  const handleCheck = (checked: boolean) => {
-    setChecked(!checked);
-    console.log(checked);
-  };
-
   return {
     email,
     setEmail,
@@ -144,8 +140,10 @@ export const useHomeEffects = () => {
     deliveryAddress,
     setDeliveryAddress,
     items,
-    checked,
-    handleCheck,
+    addressCorrect,
+    itemListCorrect,
+    setAddressCorrect,
+    setItemListCorrect,
     loginError,
     loginErrorMessage,
   };
