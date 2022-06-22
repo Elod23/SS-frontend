@@ -12,7 +12,7 @@ import {
   Checkbox,
   FormControlLabel,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import { SSLogo } from "../components";
 import { useHomeEffects, Credentials } from "./Home.effects";
@@ -26,6 +26,7 @@ const style = {
   width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
+  borderRadius: "10px",
   boxShadow: 24,
   p: 4,
 };
@@ -48,7 +49,7 @@ export default function Home() {
     checked,
     handleCheck,
     loginError,
-    loginErrorMessage
+    loginErrorMessage,
   } = useHomeEffects();
 
   return (
@@ -63,67 +64,49 @@ export default function Home() {
       }}
     >
       <div style={{ alignContent: "center" }}>
-        <SSLogo />
+        <SSLogo/>
       </div>
       <div
-        style={{ width: "65%", border: "2px solid #7c7c90", padding: "1rem" }}
+        style={{
+          width: "65%",
+          border: "2px solid #7c7c90",
+          borderRadius: "10px",
+          padding: "1rem",
+        }}
       >
         <FormGroup>
           <div style={{ display: "flex", flexDirection: "row" }}>
-            <FormControl fullWidth>
-              <InputLabel htmlFor="order-id">Order ID</InputLabel>
-              <Input
-                id="order-id"
-                aria-describedby="Your order ID"
-                value={orderId}
-                disabled
-                fullWidth
-              />
-              <FormHelperText id="my-helper-text">
-                This is prefilled.
-              </FormHelperText>
-            </FormControl>
-            <FormControl fullWidth style={{ marginLeft: "2%" }}>
-              <InputLabel htmlFor="store-id">Store ID</InputLabel>
-              <Input
-                id="store-id"
-                aria-describedby="Your store ID"
-                value={storeId}
-                disabled
-                fullWidth
-              />
-              <FormHelperText id="my-helper-text">
-                This is prefilled.
-              </FormHelperText>
-            </FormControl>
+            <TextField
+              id="order-id"
+              label="Order ID"
+              helperText="This is prefilled"
+              value={orderId}
+              disabled
+              style={{ marginTop: "5%", width: "50%" }}
+            />
           </div>
         </FormGroup>
         <Divider style={{ marginTop: "3%", marginBottom: "3%" }} />
         <FormGroup>
-          <FormControl fullWidth>
-            <InputLabel htmlFor="pickup-address">Pickup Address</InputLabel>
-            <Input
-              id="pickup-address"
-              aria-describedby="pickup-address"
-              value={pickupAddress}
-              onChange={(e) => {
-                setPickupAddress(e.target.value);
-              }}
-              fullWidth
-            />
-          </FormControl>
-          <FormControl fullWidth style={{ marginTop: "3%" }}>
-            <InputLabel htmlFor="delivery-address">Delivery Address</InputLabel>
-            <Input
-              id="delivery-address"
-              aria-describedby="delivery-address"
-              value={deliveryAddress}
-              onChange={(e) => {
-                setDeliveryAddress(e.target.value);
-              }}
-              fullWidth
-            />
-          </FormControl>
+          <TextField
+            id="pickup-address"
+            label="Pickup Address"
+            value={pickupAddress}
+            onChange={(e) => {
+              setPickupAddress(e.target.value);
+            }}
+            style={{width: "50%"}}
+          />
+          <TextField
+            id="delivery-address"
+            label="Delivery Address"
+            value={deliveryAddress}
+            onChange={(e) => {
+              setDeliveryAddress(e.target.value);
+            }}
+
+            style={{ marginTop: "3%", width: "50%"}}
+          />
           //The items table comes here
           <div>
             <FormControlLabel
@@ -152,9 +135,11 @@ export default function Home() {
           Create Shipment
         </Button>
         {isOpen && (
-          <Modal open={isOpen} onClose={handleClose}>
+          <Modal open={isOpen}>
             <Box sx={style}>
-              <Typography variant="h4" align="center">Log in to Salvagescout</Typography>
+              <Typography variant="h4" align="center">
+                Log in to Salvagescout
+              </Typography>
               <TextField
                 id="email"
                 label="Email Address"
@@ -170,7 +155,7 @@ export default function Home() {
               <TextField
                 id="password"
                 type="password"
-                label="password"
+                label="Password"
                 error={loginError}
                 helperText={loginErrorMessage}
                 FormHelperTextProps={{ error: loginError }}
@@ -189,7 +174,11 @@ export default function Home() {
                   }}
                   variant="contained"
                   color="info"
-                  style={{ display: "flex", marginTop: "5%" }}
+                  style={{
+                    display: "flex",
+                    marginTop: "5%",
+                    backgroundColor: "rgb(5, 29, 75)",
+                  }}
                 >
                   Login
                 </Button>

@@ -84,9 +84,6 @@ export const useHomeEffects = () => {
           dAddress.zipCode
       );
       setItems(items);
-
-
-
     }
   };
 
@@ -122,17 +119,15 @@ export const useHomeEffects = () => {
       handleClose();
     } else {
       setLogged(false);
-      setLoginError(true)
-      setLoginErrorMessages("Email or password is incorrect")
+      setLoginError(true);
+      setLoginErrorMessages("Email or password is incorrect");
     }
   };
 
   const handleCheck = (checked: boolean) => {
-    setChecked(!checked)
-    console.log(checked)
-  }
-
-
+    setChecked(!checked);
+    console.log(checked);
+  };
 
   return {
     email,
@@ -152,6 +147,6 @@ export const useHomeEffects = () => {
     checked,
     handleCheck,
     loginError,
-    loginErrorMessage
+    loginErrorMessage,
   };
 };
