@@ -1,35 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  FormControl,
-  InputLabel,
-  Input,
-  FormHelperText,
-  Divider,
   FormGroup,
-  Modal,
-  Box,
   Button,
   Checkbox,
   FormControlLabel,
   TextField,
   Typography,
+  ListItem,
+  ListItemAvatar,
+  ListItemIcon,
+  ListItemText,
+  List,
 } from "@mui/material";
 import { SSLogo } from "../components";
 import { useHomeEffects, Credentials } from "./Home.effects";
-import { alignProperty } from "@mui/material/styles/cssUtils";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  borderRadius: "10px",
-  boxShadow: 24,
-  p: 4,
-};
+import { LoginModal } from "../components/LoginModal";
 
 export default function Home() {
   const {
@@ -40,7 +25,7 @@ export default function Home() {
     orderId,
     storeId,
     isOpen,
-    handleClose,
+    items,
     login,
     pickupAddress,
     setPickupAddress,
@@ -64,7 +49,7 @@ export default function Home() {
       }}
     >
       <div style={{ alignContent: "center" }}>
-        <SSLogo/>
+        <SSLogo />
       </div>
       <div
         style={{
@@ -72,59 +57,87 @@ export default function Home() {
           border: "2px solid #7c7c90",
           borderRadius: "10px",
           padding: "1rem",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        <FormGroup>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <TextField
-              id="order-id"
-              label="Order ID"
-              helperText="This is prefilled"
-              value={orderId}
-              disabled
-              style={{ marginTop: "5%", width: "50%" }}
-            />
-          </div>
-        </FormGroup>
-        <Divider style={{ marginTop: "3%", marginBottom: "3%" }} />
-        <FormGroup>
-          <TextField
-            id="pickup-address"
-            label="Pickup Address"
-            value={pickupAddress}
-            onChange={(e) => {
-              setPickupAddress(e.target.value);
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
             }}
-            style={{width: "50%"}}
-          />
-          <TextField
-            id="delivery-address"
-            label="Delivery Address"
-            value={deliveryAddress}
-            onChange={(e) => {
-              setDeliveryAddress(e.target.value);
-            }}
-
-            style={{ marginTop: "3%", width: "50%"}}
-          />
-          //The items table comes here
-          <div>
-            <FormControlLabel
-              style={{ color: "black" }}
-              control={
-                <Checkbox
-                  checked={checked}
-                  onChange={(e) => {
-                    handleCheck(checked);
-                  }}
+          >
+            <FormGroup style={{ marginBottom: "6%" }}>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <TextField
+                  id="order-id"
+                  label="Order ID"
+                  helperText="This is prefilled"
+                  value={orderId}
+                  disabled
+                  style={{ marginTop: "5%" }}
                 />
-              }
-              label="I have these items in inventory."
-            />
+              </div>
+            </FormGroup>
+            <FormGroup>
+              <TextField
+                id="pickup-address"
+                label="Pickup Address"
+                value={pickupAddress}
+                onChange={(e) => {
+                  setPickupAddress(e.target.value);
+                }}
+              />
+              <TextField
+                id="delivery-address"
+                label="Delivery Address"
+                value={deliveryAddress}
+                onChange={(e) => {
+                  setDeliveryAddress(e.target.value);
+                }}
+                style={{ marginTop: "3%" }}
+              />
+              <div>
+                <FormControlLabel
+                  style={{ color: "black" }}
+                  control={
+                    <Checkbox
+                      checked={checked}
+                      onChange={(e) => {
+                        handleCheck(checked);
+                      }}
+                    />
+                  }
+                  label="I consent that the origin and target addresses are valid."
+                />
+              </div>
+            </FormGroup>
           </div>
-        </FormGroup>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            asdasdas
+            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+              Order Items
+            </Typography>
+            <List dense>
+              {items.map((item: any) => (
+                <ListItem key={item.orderItemId}>
+                  <ListItemAvatar>
+                    <ListItemIcon />
+                  </ListItemAvatar>
+                  <ListItemText primary={item?.product?.productName || "as"} />
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        </div>
         <Button
-          disabled={!checked}
+          disabled={!checked || items.length === 0}
           variant="contained"
           type="submit"
           onClick={() => {
@@ -135,56 +148,17 @@ export default function Home() {
           Create Shipment
         </Button>
         {isOpen && (
-          <Modal open={isOpen}>
-            <Box sx={style}>
-              <Typography variant="h4" align="center">
-                Log in to Salvagescout
-              </Typography>
-              <TextField
-                id="email"
-                label="Email Address"
-                defaultValue="john.doe@example.com"
-                helperText="The email address you use to log in to SalvageScout"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                fullWidth
-                style={{ marginTop: "5%" }}
-              />
-              <TextField
-                id="password"
-                type="password"
-                label="Password"
-                error={loginError}
-                helperText={loginErrorMessage}
-                FormHelperTextProps={{ error: loginError }}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                fullWidth
-                style={{ marginTop: "5%" }}
-              />
-              <FormGroup>
-                <Button
-                  type="submit"
-                  onClick={() => {
-                    login({ email, password, storeId } as Credentials);
-                  }}
-                  variant="contained"
-                  color="info"
-                  style={{
-                    display: "flex",
-                    marginTop: "5%",
-                    backgroundColor: "rgb(5, 29, 75)",
-                  }}
-                >
-                  Login
-                </Button>
-              </FormGroup>
-            </Box>
-          </Modal>
+          <LoginModal 
+            isOpen={isOpen}
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            storeId={storeId}
+            login={login}
+            loginError={loginError}
+            loginErrorMessage={loginErrorMessage}
+          />
         )}
       </div>
     </div>
