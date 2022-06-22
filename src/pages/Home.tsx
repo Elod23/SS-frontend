@@ -10,7 +10,9 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControlLabel
+  FormControlLabel,
+  TextField,
+  Typography
 } from "@mui/material";
 import { SSLogo } from "../components";
 import { useHomeEffects, Credentials } from "./Home.effects";
@@ -44,7 +46,9 @@ export default function Home() {
     deliveryAddress,
     setDeliveryAddress,
     checked,
-    handleCheck
+    handleCheck,
+    loginError,
+    loginErrorMessage
   } = useHomeEffects();
 
   return (
@@ -120,16 +124,18 @@ export default function Home() {
               fullWidth
             />
           </FormControl>
-              //The items table comes here
+          //The items table comes here
           <div>
             <FormControlLabel
               style={{ color: "black" }}
               control={
                 <Checkbox
-                checked={checked}
+                  checked={checked}
                   onChange={(e) => {
                     handleCheck(checked);
-                  }} />}
+                  }}
+                />
+              }
               label="I have these items in inventory."
             />
           </div>
@@ -138,7 +144,6 @@ export default function Home() {
           disabled={!checked}
           variant="contained"
           type="submit"
-
           onClick={() => {
             login({ email, password, storeId } as Credentials);
           }}
@@ -147,42 +152,36 @@ export default function Home() {
           Create Shipment
         </Button>
         {isOpen && (
-          <Modal
-            open={isOpen}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
+          <Modal open={isOpen} onClose={handleClose}>
             <Box sx={style}>
+              <Typography variant="h4" align="center">Log in to Salvagescout</Typography>
+              <TextField
+                id="email"
+                label="Email Address"
+                defaultValue="john.doe@example.com"
+                helperText="The email address you use to log in to SalvageScout"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                fullWidth
+                style={{ marginTop: "5%" }}
+              />
+              <TextField
+                id="password"
+                type="password"
+                label="password"
+                error={loginError}
+                helperText={loginErrorMessage}
+                FormHelperTextProps={{ error: loginError }}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                fullWidth
+                style={{ marginTop: "5%" }}
+              />
               <FormGroup>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="order-id">Email</InputLabel>
-                  <Input
-                    id="email"
-                    aria-describedby="Your SalvageScout email address"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
-                    fullWidth
-                  />
-                  <FormHelperText style={{ marginBottom: "5%" }}>
-                    The email address you use to log into SalvageScout.
-                  </FormHelperText>
-                </FormControl>
-                <FormControl fullWidth style={{ marginBottom: "5%" }}>
-                  <InputLabel htmlFor="password">Password</InputLabel>
-                  <Input
-                    id="password"
-                    aria-describedby="Your SalvageScout password"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
-                    fullWidth
-                    type="password"
-                  />
-                </FormControl>
                 <Button
                   type="submit"
                   onClick={() => {
@@ -190,7 +189,7 @@ export default function Home() {
                   }}
                   variant="contained"
                   color="info"
-                  style={{ display: "flex"}}
+                  style={{ display: "flex", marginTop: "5%" }}
                 >
                   Login
                 </Button>
