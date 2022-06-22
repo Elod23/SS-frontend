@@ -8,9 +8,10 @@ import {
   Typography,
   ListItem,
   ListItemAvatar,
-  ListItemIcon,
   ListItemText,
+  Divider,
   List,
+  Avatar,
 } from "@mui/material";
 import { SSLogo } from "../components";
 import { useHomeEffects, Credentials } from "./Home.effects";
@@ -31,8 +32,10 @@ export default function Home() {
     setPickupAddress,
     deliveryAddress,
     setDeliveryAddress,
-    checked,
-    handleCheck,
+    addressCorrect,
+    setAddressCorrect,
+    itemListCorrect,
+    setItemListCorrect,
     loginError,
     loginErrorMessage,
   } = useHomeEffects();
@@ -41,125 +44,176 @@ export default function Home() {
     <div
       className="container"
       style={{
-        width: "100vw",
-        height: "100vh",
+        width: "100%",
+        height: "100%",
         alignItems: "center",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <div style={{ alignContent: "center" }}>
-        <SSLogo />
-      </div>
       <div
         style={{
-          width: "65%",
-          border: "2px solid #7c7c90",
-          borderRadius: "10px",
-          padding: "1rem",
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
         }}
       >
         <div
           style={{
+            width: "65%",
+            border: "2px solid #072c60",
+            borderRadius: "10px",
+            padding: "1rem",
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
           }}
         >
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
+              flexDirection: "row",
             }}
           >
-            <FormGroup style={{ marginBottom: "6%" }}>
-              <div style={{ display: "flex", flexDirection: "row" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <FormGroup style={{ marginBottom: "6%" }}>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <TextField
+                    id="order-id"
+                    label="Order ID"
+                    helperText="This is prefilled"
+                    value={orderId}
+                    disabled
+                    style={{ marginTop: "5%" }}
+                  />
+                </div>
+              </FormGroup>
+              <FormGroup>
                 <TextField
-                  id="order-id"
-                  label="Order ID"
-                  helperText="This is prefilled"
-                  value={orderId}
-                  disabled
-                  style={{ marginTop: "5%" }}
+                  id="pickup-address"
+                  label="Pickup Address"
+                  value={pickupAddress}
+                  onChange={(e) => {
+                    setPickupAddress(e.target.value);
+                  }}
                 />
-              </div>
-            </FormGroup>
-            <FormGroup>
-              <TextField
-                id="pickup-address"
-                label="Pickup Address"
-                value={pickupAddress}
-                onChange={(e) => {
-                  setPickupAddress(e.target.value);
-                }}
-              />
-              <TextField
-                id="delivery-address"
-                label="Delivery Address"
-                value={deliveryAddress}
-                onChange={(e) => {
-                  setDeliveryAddress(e.target.value);
-                }}
-                style={{ marginTop: "3%" }}
-              />
-              <div>
-                <FormControlLabel
-                  style={{ color: "black" }}
-                  control={
-                    <Checkbox
-                      checked={checked}
-                      onChange={(e) => {
-                        handleCheck(checked);
-                      }}
-                    />
-                  }
-                  label="I consent that the origin and target addresses are valid."
+                <TextField
+                  id="delivery-address"
+                  label="Delivery Address"
+                  value={deliveryAddress}
+                  onChange={(e) => {
+                    setDeliveryAddress(e.target.value);
+                  }}
+                  style={{ marginTop: "3%" }}
                 />
-              </div>
-            </FormGroup>
+                <div>
+                  <FormControlLabel
+                    style={{ color: "black" }}
+                    control={
+                      <Checkbox
+                        checked={addressCorrect}
+                        onChange={(e) => {
+                          setAddressCorrect(!addressCorrect);
+                        }}
+                      />
+                    }
+                    label="I consent that the origin and target addresses are valid."
+                  />
+                </div>
+              </FormGroup>
+              <Button
+            disabled={!addressCorrect || !itemListCorrect || items.length === 0}
+            variant="contained"
+            type="submit"
+            onClick={() => {
+              login({ email, password, storeId } as Credentials);
+            }}
+            color='info'
+            fullWidth
+          >
+            Create Shipment
+          </Button>
+            </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            asdasdas
-            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-              Order Items
-            </Typography>
-            <List dense>
-              {items.map((item: any) => (
-                <ListItem key={item.orderItemId}>
-                  <ListItemAvatar>
-                    <ListItemIcon />
-                  </ListItemAvatar>
-                  <ListItemText primary={item?.product?.productName || "as"} />
-                </ListItem>
-              ))}
-            </List>
-          </div>
+          {isOpen && (
+            <LoginModal
+              isOpen={isOpen}
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+              storeId={storeId}
+              login={login}
+              loginError={loginError}
+              loginErrorMessage={loginErrorMessage}
+            />
+          )}
         </div>
-        <Button
-          disabled={!checked || items.length === 0}
-          variant="contained"
-          type="submit"
-          onClick={() => {
-            login({ email, password, storeId } as Credentials);
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginLeft: "10%",
+            border: "2px solid #072c60",
+            borderRadius: "10px",
+            padding: "1rem",
           }}
-          color="info"
         >
-          Create Shipment
-        </Button>
-        {isOpen && (
-          <LoginModal 
-            isOpen={isOpen}
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            storeId={storeId}
-            login={login}
-            loginError={loginError}
-            loginErrorMessage={loginErrorMessage}
+          <Typography variant="h4" align="center" color="black">
+            Item list
+          </Typography>
+          <List
+            sx={{
+              bgcolor: "background.paper",
+              width: "100%",
+              maxWidth: 360,
+              color: "black",
+            }}
+          >
+            {items &&
+              items.length > 0 &&
+              items.map((item: any) => (
+                <>
+                  <ListItem
+                    key={item.product.productId || "1"}
+                    alignItems="flex-start"
+                  >
+                    <ListItemAvatar>
+                      {item.product.listMedia && (
+                        <Avatar
+                          alt="item visualization"
+                          src={
+                            item.product.listMedia[0].basePath +
+                            item.product.listMedia[0].filename
+                          }
+                        />
+                      )}
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={item.product.productName}
+                      secondary={item.product.productShortDescription}
+                    />
+                  </ListItem>
+                  <Divider variant="inset" component="li" color="black" />
+                </>
+              ))}
+          </List>
+          <FormControlLabel
+            style={{ color: "black", alignSelf: 'flex-end !important'  }}
+            control={
+              <Checkbox
+                checked={itemListCorrect}
+                onChange={() => {
+                  setItemListCorrect(!itemListCorrect);
+                }}
+              />
+            }
+            label="I consent that all items are available and will be shipped."
           />
-        )}
+        </div>
       </div>
     </div>
   );
