@@ -95,7 +95,7 @@ export default function Home() {
             onChange={(e) => {
               setPickupAddress(e.target.value);
             }}
-            fullWidth
+            style={{width: "50%"}}
           />
           <TextField
             id="delivery-address"
@@ -104,8 +104,8 @@ export default function Home() {
             onChange={(e) => {
               setDeliveryAddress(e.target.value);
             }}
-            fullWidth
-            style={{ marginTop: "3%" }}
+
+            style={{ marginTop: "3%", width: "50%"}}
           />
           //The items table comes here
           <div>
@@ -155,7 +155,7 @@ export default function Home() {
               <TextField
                 id="password"
                 type="password"
-                label="password"
+                label="Password"
                 error={loginError}
                 helperText={loginErrorMessage}
                 FormHelperTextProps={{ error: loginError }}
