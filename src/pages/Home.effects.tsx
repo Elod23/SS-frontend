@@ -18,7 +18,9 @@ export const useHomeEffects = () => {
   const [pickupAddress, setPickupAddress] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [items, setItems] = useState("");
-
+  const [checked, setChecked] = useState(false);
+  const [loginError, setLoginError] = useState(false);
+  const [loginErrorMessage, setLoginErrorMessages] = useState("");
   const {
     setLogged,
     setAuthToken,
@@ -81,10 +83,7 @@ export const useHomeEffects = () => {
           ", " +
           dAddress.zipCode
       );
-      setItems(items.productName)
-
-
-
+      setItems(items);
     }
   };
 
@@ -120,7 +119,14 @@ export const useHomeEffects = () => {
       handleClose();
     } else {
       setLogged(false);
+      setLoginError(true);
+      setLoginErrorMessages("Email or password is incorrect");
     }
+  };
+
+  const handleCheck = (checked: boolean) => {
+    setChecked(!checked);
+    console.log(checked);
   };
 
   return {
@@ -136,6 +142,11 @@ export const useHomeEffects = () => {
     pickupAddress,
     setPickupAddress,
     deliveryAddress,
-    setDeliveryAddress
+    setDeliveryAddress,
+    items,
+    checked,
+    handleCheck,
+    loginError,
+    loginErrorMessage,
   };
 };

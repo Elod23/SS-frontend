@@ -10,10 +10,13 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControlLabel
+  FormControlLabel,
+  TextField,
+  Typography,
 } from "@mui/material";
 import { SSLogo } from "../components";
 import { useHomeEffects, Credentials } from "./Home.effects";
+import { alignProperty } from "@mui/material/styles/cssUtils";
 
 const style = {
   position: "absolute" as "absolute",
@@ -23,6 +26,7 @@ const style = {
   width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
+  borderRadius: "10px",
   boxShadow: 24,
   p: 4,
 };
@@ -42,6 +46,10 @@ export default function Home() {
     setPickupAddress,
     deliveryAddress,
     setDeliveryAddress,
+    checked,
+    handleCheck,
+    loginError,
+    loginErrorMessage,
   } = useHomeEffects();
 
   return (
@@ -56,118 +64,121 @@ export default function Home() {
       }}
     >
       <div style={{ alignContent: "center" }}>
-        <SSLogo />
+        <SSLogo/>
       </div>
       <div
-        style={{ width: "65%", border: "2px solid #7c7c90", padding: "1rem" }}
+        style={{
+          width: "65%",
+          border: "2px solid #7c7c90",
+          borderRadius: "10px",
+          padding: "1rem",
+        }}
       >
         <FormGroup>
           <div style={{ display: "flex", flexDirection: "row" }}>
-            <FormControl fullWidth>
-              <InputLabel htmlFor="order-id">Order ID</InputLabel>
-              <Input
-                id="order-id"
-                aria-describedby="Your order ID"
-                value={orderId}
-                disabled
-                fullWidth
-              />
-              <FormHelperText id="my-helper-text">
-                This is prefilled.
-              </FormHelperText>
-            </FormControl>
-            <FormControl fullWidth style={{ marginLeft: "2%" }}>
-              <InputLabel htmlFor="store-id">Store ID</InputLabel>
-              <Input
-                id="store-id"
-                aria-describedby="Your store ID"
-                value={storeId}
-                disabled
-                fullWidth
-              />
-              <FormHelperText id="my-helper-text">
-                This is prefilled.
-              </FormHelperText>
-            </FormControl>
+            <TextField
+              id="order-id"
+              label="Order ID"
+              helperText="This is prefilled"
+              value={orderId}
+              disabled
+              style={{ marginTop: "5%", width: "50%" }}
+            />
           </div>
         </FormGroup>
         <Divider style={{ marginTop: "3%", marginBottom: "3%" }} />
         <FormGroup>
-          <FormControl fullWidth>
-            <InputLabel htmlFor="pickup-address">Pickup Address</InputLabel>
-            <Input
-              id="pickup-address"
-              aria-describedby="pickup-address"
-              value={pickupAddress}
-              onChange={(e) => {
-                setPickupAddress(e.target.value);
-              }}
-              fullWidth
-            />
-          </FormControl>
-          <FormControl fullWidth style={{ marginTop: "3%" }}>
-            <InputLabel htmlFor="delivery-address">Delivery Address</InputLabel>
-            <Input
-              id="delivery-address"
-              aria-describedby="delivery-address"
-              value={deliveryAddress}
-              onChange={(e) => {
-                setDeliveryAddress(e.target.value);
-              }}
-              fullWidth
-            />
-          </FormControl>
+          <TextField
+            id="pickup-address"
+            label="Pickup Address"
+            value={pickupAddress}
+            onChange={(e) => {
+              setPickupAddress(e.target.value);
+            }}
+            style={{width: "50%"}}
+          />
+          <TextField
+            id="delivery-address"
+            label="Delivery Address"
+            value={deliveryAddress}
+            onChange={(e) => {
+              setDeliveryAddress(e.target.value);
+            }}
+
+            style={{ marginTop: "3%", width: "50%"}}
+          />
+          //The items table comes here
           <div>
-            <FormControlLabel style={{ color: 'black' }}
-            control={<Checkbox />}
-            label="I have these items in inventory."
+            <FormControlLabel
+              style={{ color: "black" }}
+              control={
+                <Checkbox
+                  checked={checked}
+                  onChange={(e) => {
+                    handleCheck(checked);
+                  }}
+                />
+              }
+              label="I have these items in inventory."
             />
           </div>
         </FormGroup>
+        <Button
+          disabled={!checked}
+          variant="contained"
+          type="submit"
+          onClick={() => {
+            login({ email, password, storeId } as Credentials);
+          }}
+          color="info"
+        >
+          Create Shipment
+        </Button>
         {isOpen && (
-          <Modal
-            open={isOpen}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
+          <Modal open={isOpen}>
             <Box sx={style}>
+              <Typography variant="h4" align="center">
+                Log in to Salvagescout
+              </Typography>
+              <TextField
+                id="email"
+                label="Email Address"
+                defaultValue="john.doe@example.com"
+                helperText="The email address you use to log in to SalvageScout"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                fullWidth
+                style={{ marginTop: "5%" }}
+              />
+              <TextField
+                id="password"
+                type="password"
+                label="Password"
+                error={loginError}
+                helperText={loginErrorMessage}
+                FormHelperTextProps={{ error: loginError }}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                fullWidth
+                style={{ marginTop: "5%" }}
+              />
               <FormGroup>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="order-id">Email</InputLabel>
-                  <Input
-                    id="email"
-                    aria-describedby="Your SalvageScout email address"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
-                    fullWidth
-                  />
-                  <FormHelperText style={{ marginBottom: "5%" }}>
-                    The email address you use to log into SalvageScout.
-                  </FormHelperText>
-                </FormControl>
-                <FormControl fullWidth style={{ marginBottom: "5%" }}>
-                  <InputLabel htmlFor="password">Password</InputLabel>
-                  <Input
-                    id="password"
-                    aria-describedby="Your SalvageScout password"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
-                    fullWidth
-                    type="password"
-                  />
-                </FormControl>
                 <Button
                   type="submit"
                   onClick={() => {
                     login({ email, password, storeId } as Credentials);
                   }}
-                  variant="outlined"
+                  variant="contained"
                   color="info"
+                  style={{
+                    display: "flex",
+                    marginTop: "5%",
+                    backgroundColor: "rgb(5, 29, 75)",
+                  }}
                 >
                   Login
                 </Button>
