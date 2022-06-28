@@ -16,6 +16,7 @@ import {
 import { SSLogo } from "../components";
 import { useHomeEffects, Credentials } from "./Home.effects";
 import { LoginModal } from "../components/LoginModal";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const {
@@ -36,6 +37,10 @@ export default function Home() {
     setAddressCorrect,
     itemListCorrect,
     setItemListCorrect,
+    shipmentId,
+    trackingNumber,
+    labelDownload,
+    createShipment,
     loginError,
     loginErrorMessage,
   } = useHomeEffects();
@@ -129,7 +134,7 @@ export default function Home() {
             variant="contained"
             type="submit"
             onClick={() => {
-              login({ email, password, storeId } as Credentials);
+              createShipment();
             }}
             color='info'
             fullWidth
@@ -215,6 +220,7 @@ export default function Home() {
           />
         </div>
       </div>
+      {labelDownload && (<a href={labelDownload} download target="_blank" rel="noreferrer">Download Label</a>)}
     </div>
   );
 }
