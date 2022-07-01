@@ -13,12 +13,12 @@ import {
   List,
   Avatar,
 } from "@mui/material";
-import { SSLogo } from "../components";
-import { useHomeEffects, Credentials } from "./Home.effects";
+import { useHomeEffects } from "./Home.effects";
 import { LoginModal } from "../components/LoginModal";
-import { Link } from "react-router-dom";
+import { LabelModal } from "../components/LabelModal";
 
 export default function Home() {
+
   const {
     email,
     setEmail,
@@ -37,10 +37,11 @@ export default function Home() {
     setAddressCorrect,
     itemListCorrect,
     setItemListCorrect,
-    shipmentId,
-    trackingNumber,
-    labelDownload,
     createShipment,
+    updateTrackingUrl,
+    labels,
+    isOpenDownload,
+    setOpenDownload,
     loginError,
     loginErrorMessage,
   } = useHomeEffects();
@@ -156,6 +157,7 @@ export default function Home() {
               loginErrorMessage={loginErrorMessage}
             />
           )}
+          {isOpenDownload && labels && (<LabelModal isOpen={isOpenDownload} close={() => setOpenDownload(false)} labels={labels}/>)}
         </div>
         <div
           style={{
@@ -220,7 +222,6 @@ export default function Home() {
           />
         </div>
       </div>
-      {labelDownload && (<a href={labelDownload} download target="_blank" rel="noreferrer">Download Label</a>)}
     </div>
   );
 }
