@@ -23,7 +23,7 @@ function App() {
       <Router>
         <Switch>
           <Route path="/" element={<Root />} />
-          <Route path="/:storeId/:orderId" element={<Home />} />
+          <Route path="/:storeID/:orderID" element={<Home />} />
         </Switch>
       </Router>
       <footer className="App-footer">

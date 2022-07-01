@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import {
   encrissBaseUrl,
   shipengineApiKey,
@@ -19,6 +20,7 @@ export const useHomeEffects = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isOpen, setOpen] = useState(true);
+  const [isOpenDownload, setOpenDownload] = useState(false);
   const [pickupAddress, setPickupAddress] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [items, setItems] = useState([]);
@@ -29,7 +31,7 @@ export const useHomeEffects = () => {
   const [rateId, setRateId] = useState("");
   const [shipmentId, setShipmentId] = useState("");
   const [trackingNumber, setTrackingNumber] = useState("");
-  const [labelDownload, setLabelDownload] = useState("");
+  const [labels, setLabels] = useState<string[]>([]);
   const {
     setLogged,
     setAuthToken,
@@ -39,10 +41,40 @@ export const useHomeEffects = () => {
     authToken,
   } = useUserState();
 
+  const { orderID, storeID } = useParams();
+
   useEffect(() => {
-    setOrderId("965-171-1");
-    setStoreId("86110a3d-f8ba-41c9-9eae-29c04c836ff3");
-  }, []);
+    setOrderId(orderID || "");
+    setStoreId(storeID || "");
+  }, [orderID, storeID]);
+
+  const updateTrackingUrl = useCallback( async() => {
+    const result = await axios({
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+      url: `${encrissBaseUrl}/api/v1/store/updateSubOrderTrackingURL`,
+      data: {
+        storeId,
+        subOrderId: orderId,
+        token: {
+          fingerprint: {
+            deviceFingerprint: "",
+            jsonOtherInfo: ""
+          },
+          loginToken: loginToken
+        },
+        trackingUrl: `https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}`
+      }
+    })
+    console.log(result);
+    if(result.status === 200) {
+      console.log("success");
+    } else {
+      console.log("fail");
+    }
+  }, [authToken, loginToken, orderId, storeId, trackingNumber]);
 
   const fetchDetails = useCallback(
     async (loginToken: string) => {
@@ -73,7 +105,6 @@ export const useHomeEffects = () => {
         const items = result.data.orderItems;
         const rateId = result.data.shippingOption.rateId;
         setRateId(rateId);
-        setLabelDownload('https://api.shipengine.com/v1/downloads/10/EwSjO6y4p0CzLpXhdyH6pw/label-181916850.png');
         setPickupAddress(
           pAddress.addLine1 +
             " " +
@@ -166,10 +197,12 @@ export const useHomeEffects = () => {
         console.log(shipment_id, tracking_number, label_download.pdf);
         setShipmentId(shipment_id);
         setTrackingNumber(tracking_number);
-        setLabelDownload(label_download.pdf);
+        setLabels([label_download.pdf!, label_download.png!, label_download.zpl!]);
+        setOpenDownload(true);
+        await updateTrackingUrl();
       }
     }
-  }, [rateId]);
+  }, [rateId, updateTrackingUrl]);
 
   return {
     email,
@@ -190,10 +223,13 @@ export const useHomeEffects = () => {
     itemListCorrect,
     setAddressCorrect,
     setItemListCorrect,
-    labelDownload,
+    updateTrackingUrl,
+    labels,
     shipmentId,
     trackingNumber,
     createShipment,
+    isOpenDownload,
+    setOpenDownload,
     loginError,
     loginErrorMessage,
   };
