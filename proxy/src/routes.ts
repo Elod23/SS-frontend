@@ -7,17 +7,23 @@ routes.post("/shipengine/:uri", (req, res) => {
   const { uri } = req.params;
   const { headers } = req;
   const { body } = req;
-
+  const decoded = decodeURIComponent(uri);
+  console.log('decoded request', decoded);
+  console.log(headers, uri, body);
   return request.post(
     {
-      url: decodeURI(uri),
+      url: decoded,
       json: body,
-      headers,
+      headers: {
+        'API-Key': headers['api-key'],
+        'Host': 'api.shipengine.com',
+        'Content-Type': 'application/json'
+      },
     },
-    (err, body) => {
+    (err, resp) => {
       if (!err) {
-        console.log(body);
-        res.send(body);
+        console.log(resp.body);
+        res.send(resp.body);
       } else {
         res.sendStatus(500);
       }

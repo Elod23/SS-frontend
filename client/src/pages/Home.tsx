@@ -13,11 +13,13 @@ import {
   List,
   Avatar,
 } from "@mui/material";
-import { SSLogo } from "../components";
-import { useHomeEffects, Credentials } from "./Home.effects";
+import { useHomeEffects } from "./Home.effects";
 import { LoginModal } from "../components/LoginModal";
+import { LabelModal } from "../components/LabelModal";
+import { ErrorModal } from "../components/ErrorModal";
 
 export default function Home() {
+
   const {
     email,
     setEmail,
@@ -36,6 +38,13 @@ export default function Home() {
     setAddressCorrect,
     itemListCorrect,
     setItemListCorrect,
+    createShipment,
+    updateTrackingUrl,
+    labels,
+    isOpenDownload,
+    setOpenDownload,
+    apiError,
+    setApiError,
     loginError,
     loginErrorMessage,
   } = useHomeEffects();
@@ -129,7 +138,7 @@ export default function Home() {
             variant="contained"
             type="submit"
             onClick={() => {
-              login({ email, password, storeId } as Credentials);
+              createShipment();
             }}
             color='info'
             fullWidth
@@ -151,6 +160,8 @@ export default function Home() {
               loginErrorMessage={loginErrorMessage}
             />
           )}
+          {isOpenDownload && labels && (<LabelModal isOpen={isOpenDownload} close={() => setOpenDownload(false)} labels={labels}/>)}
+          {apiError && (<ErrorModal isOpen={apiError !== undefined} close={() => setApiError(undefined)}/>)}
         </div>
         <div
           style={{
