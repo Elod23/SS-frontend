@@ -32,6 +32,7 @@ export const useHomeEffects = () => {
   const [shipmentId, setShipmentId] = useState("");
   const [trackingNumber, setTrackingNumber] = useState("");
   const [labels, setLabels] = useState<string[]>([]);
+  const [apiError, setApiError] = useState<Object | undefined>(undefined);
   const {
     setLogged,
     setAuthToken,
@@ -54,7 +55,7 @@ export const useHomeEffects = () => {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
-      url: `${encrissBaseUrl}/api/v1/store/updateSubOrderTrackingURL`,
+      url: `${encrissBaseUrl}/store/updateSubOrderTrackingURL`,
       data: {
         storeId,
         subOrderId: orderId,
@@ -72,7 +73,7 @@ export const useHomeEffects = () => {
     if(result.status === 200) {
       console.log("success");
     } else {
-      console.log("fail");
+      setApiError(result.data.errors);
     }
   }, [authToken, loginToken, orderId, storeId, trackingNumber]);
 
@@ -99,7 +100,7 @@ export const useHomeEffects = () => {
       });
       console.log(result);
 
-      if (result.status === 200 && result.data !== "") {
+      if (result.status === 200 && result.data.orderItems) {
         const pAddress = result.data.store.storeAddress;
         const dAddress = result.data.deliveryAddress;
         const items = result.data.orderItems;
@@ -128,6 +129,8 @@ export const useHomeEffects = () => {
             dAddress.zipCode
         );
         setItems(items);
+      } else {
+        setApiError(result.data.message);
       }
     },
     [authToken, orderId]
@@ -200,6 +203,8 @@ export const useHomeEffects = () => {
         setLabels([label_download.pdf!, label_download.png!, label_download.zpl!]);
         setOpenDownload(true);
         await updateTrackingUrl();
+      } else {
+        setApiError(result.data.errors);
       }
     }
   }, [rateId, updateTrackingUrl]);
@@ -230,6 +235,8 @@ export const useHomeEffects = () => {
     createShipment,
     isOpenDownload,
     setOpenDownload,
+    apiError,
+    setApiError,
     loginError,
     loginErrorMessage,
   };

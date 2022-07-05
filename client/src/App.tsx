@@ -16,7 +16,7 @@ function App() {
       <header className="App-header">
         <SSLogo small />
         <title>SalvageScout Order Creator</title>
-        <Typography variant="h4" align="center" justifyContent='center' color="#072c60" marginRight="25%">
+        <Typography variant="h4" align="center" justifyContent='center' color="#072c60" marginRight="35%">
           ©SalvageScout Shipment Order Manager
         </Typography>
       </header>
@@ -29,6 +29,17 @@ function App() {
       <footer className="App-footer">
         <Typography variant="h6" align="center" color="#072c60">
           ©SalvageScout 2022 All Rights reserved.
+        </Typography>
+        <Typography variant="h6" align="center" color="#072c60">
+          Contact us at  <a
+              href="mailto:info@salvagescout.com"
+              target="_blank"
+              rel="noreferrer"
+              style={{textDecoration:'none'}}
+              onClick={(e) => e.stopPropagation()}
+            >
+              info@salvagescout.com
+            </a>
         </Typography>
       </footer>
     </div>

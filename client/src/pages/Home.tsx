@@ -16,6 +16,7 @@ import {
 import { useHomeEffects } from "./Home.effects";
 import { LoginModal } from "../components/LoginModal";
 import { LabelModal } from "../components/LabelModal";
+import { ErrorModal } from "../components/ErrorModal";
 
 export default function Home() {
 
@@ -42,6 +43,8 @@ export default function Home() {
     labels,
     isOpenDownload,
     setOpenDownload,
+    apiError,
+    setApiError,
     loginError,
     loginErrorMessage,
   } = useHomeEffects();
@@ -158,6 +161,7 @@ export default function Home() {
             />
           )}
           {isOpenDownload && labels && (<LabelModal isOpen={isOpenDownload} close={() => setOpenDownload(false)} labels={labels}/>)}
+          {apiError && (<ErrorModal isOpen={apiError !== undefined} close={() => setApiError(undefined)}/>)}
         </div>
         <div
           style={{
