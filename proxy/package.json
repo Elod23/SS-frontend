@@ -2,6 +2,9 @@
   "name": "proxy",
   "version": "1.0.0",
   "main": "index.ts",
+  "engines": {
+    "node": "16.x"
+  },
   "author": "Elod23",
   "license": "none",
   "private": true,
