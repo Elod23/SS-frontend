@@ -5,7 +5,7 @@
     {
       "src": "proxy/build/index.js",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["proxy/build/**"] }
+      "config": { "includeFiles": ["proxy/public/**"] }
     },
     {
       "src": "client/build/**",
@@ -16,7 +16,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "proxy/build/index.js"
+      "dest": "proxy/public/index.js"
     },
     {
       "src": "/",
