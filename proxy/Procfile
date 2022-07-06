@@ -1,1 +1,1 @@
-web: cd proxy && npm run start
+web: cd proxy && node public/server.js
