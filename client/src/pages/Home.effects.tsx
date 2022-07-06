@@ -190,9 +190,7 @@ export const useHomeEffects = () => {
       };
       const result = await axios({
         method: "POST",
-        url: `${proxyUrl}/shipengine/${encodeURIComponent(
-          shipEngineUrl
-        )}`,
+        url: shipEngineUrl,
         headers,
         data: body,
       });
