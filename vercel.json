@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "env": {},
+  "builds": [
+    {
+      "src": "proxy/build/index.js",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["proxy/build/**"] }
+    },
+    {
+      "src": "client/build/**",
+      "use": "@vercel/static",
+      "config": { "includeFiles": ["client/build/**"] }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "client/build/index.js"
+    },
+    {
+      "src": "/",
+      "dest": "client/build/index.html"
+    },
+    {
+      "src": "/(.+)",
+      "dest": "client/build/$1"
+    }
+  ]
+}
