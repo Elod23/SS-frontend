@@ -16,7 +16,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "client/build/index.js"
+      "dest": "proxy/build/index.js"
     },
     {
       "src": "/",
