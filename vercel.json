@@ -3,7 +3,7 @@
   "env": {},
   "builds": [
     {
-      "src": "proxy/build/index.js",
+      "src": "proxy/public/index.js",
       "use": "@vercel/node",
       "config": { "includeFiles": ["proxy/public/**"] }
     },
