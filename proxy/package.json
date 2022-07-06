@@ -11,8 +11,7 @@
   "scripts": {
     "build": "tsc --project .",
     "start:dev": "nodemon src/server.ts",
-    "start": "node public/server.js",
-    "heroku-postbuild": "npm run build"
+    "start": "node public/server.js"
   },
   "dependencies": {
     "@types/cors": "^2.8.12",
