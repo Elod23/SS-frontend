@@ -1,3 +1,0 @@
-# Send any path that begins with “*.shipment.salvagescout.com/*” to the default service.
-- url: "*.shipment.salvagescout.com/*"
-  service: default
