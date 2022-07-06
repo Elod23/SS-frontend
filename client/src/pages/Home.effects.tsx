@@ -3,6 +3,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import {
   encrissBaseUrl,
+  proxyUrl,
+  rootUri,
   shipengineApiKey,
   shipengineBaseUrl,
 } from "../config/config";
@@ -175,10 +177,10 @@ export const useHomeEffects = () => {
 
   const createShipment = useCallback(async () => {
     if (rateId) {
-      const shipEngineUrl = `https://api.shipengine.com/v1/labels/rates/${rateId}`;
+      const shipEngineUrl = `${shipengineBaseUrl}/v1/labels/rates/${rateId}`;
       const headers = {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": rootUri,
         "API-Key": shipengineApiKey,
         Host: shipengineBaseUrl,
       };
@@ -188,7 +190,7 @@ export const useHomeEffects = () => {
       };
       const result = await axios({
         method: "POST",
-        url: `http://localhost:3333/shipengine/${encodeURIComponent(
+        url: `${proxyUrl}/shipengine/${encodeURIComponent(
           shipEngineUrl
         )}`,
         headers,

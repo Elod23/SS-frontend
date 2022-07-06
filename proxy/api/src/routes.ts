@@ -1,6 +1,6 @@
 import { Router } from "express";
 import request from "request";
-
+require('dotenv').config();
 const routes = Router();
 
 routes.post("/shipengine/:uri", (req, res) => {

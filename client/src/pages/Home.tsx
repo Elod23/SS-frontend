@@ -39,7 +39,6 @@ export default function Home() {
     itemListCorrect,
     setItemListCorrect,
     createShipment,
-    updateTrackingUrl,
     labels,
     isOpenDownload,
     setOpenDownload,

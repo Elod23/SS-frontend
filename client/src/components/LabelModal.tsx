@@ -1,5 +1,4 @@
 import React from "react";
-import { useHomeEffects } from "../pages/Home.effects";
 import {
   Typography,
   Modal,
