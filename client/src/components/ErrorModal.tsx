@@ -19,10 +19,11 @@ const style = {
 interface ModalProps {
   isOpen: boolean;
   close: () => void;
+  error: any;
 }
 
 export const ErrorModal = (props: ModalProps) => {
-  const { isOpen, close } = props;
+  const { isOpen, close, error } = props;
 
   return (
     <Modal open={isOpen} onClose={close}>
@@ -38,7 +39,7 @@ export const ErrorModal = (props: ModalProps) => {
           <Typography variant="h4" align="center">
             Something went wrong
           </Typography>
-          <CloseIcon onClick={close} style={{ cursor: "pointer"}}/>
+          <CloseIcon onClick={close} style={{ cursor: "pointer" }} />
         </div>
         <div
           style={{
@@ -48,8 +49,21 @@ export const ErrorModal = (props: ModalProps) => {
             alignItems: "center",
           }}
         >
-          <ErrorIcon style={{ color: "red", width: "50px", height: "50px", marginTop: '2%', marginBottom: '2%'}} />
+          <ErrorIcon
+            style={{
+              color: "red",
+              width: "50px",
+              height: "50px",
+              marginTop: "2%",
+              marginBottom: "2%",
+            }}
+          />
           <p style={{ justifyContent: "center" }}>
+            <Typography variant="h6" align="center" marginBottom={"5%"} color="red">
+              {Array.isArray(error)
+                ? error.map((e) => e.message).join("\n")
+                : error.message}
+            </Typography>
             A call to an external provider has failed. Please don't repeat your
             action and wait a few minutes before trying again. In case of
             failure contact someone from team SalvageScout{" "}
