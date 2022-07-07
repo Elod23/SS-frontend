@@ -1,7 +1,7 @@
 {
   "name": "proxy",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "server.js",
   "engines": {
     "node": "16.x"
   },
