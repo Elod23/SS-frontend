@@ -5,8 +5,8 @@ import fs from 'fs';
 import https from 'https';
 import http, { Server } from 'http';
 
-var key = fs.readFileSync(__dirname + '/../../cert.key', 'utf-8');
-var cert = fs.readFileSync(__dirname + '/../../cert.crt', 'utf-8');
+var key = fs.readFileSync(__dirname + '/../origin.key', 'utf-8');
+var cert = fs.readFileSync(__dirname + '/../origin.crt', 'utf-8');
 var options = {
   key: key,
   cert: cert
