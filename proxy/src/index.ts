@@ -4,6 +4,7 @@ import cors from 'cors';
 import fs from 'fs';
 import https from 'https';
 import http, { Server } from 'http';
+import sslRedirect from 'heroku-ssl-redirect';
 
 var key = fs.readFileSync(__dirname + '/../origin.key', 'utf-8');
 var cert = fs.readFileSync(__dirname + '/../origin.crt', 'utf-8');
@@ -30,6 +31,7 @@ class App {
   middlewares() {
     this.app.use(cors());
     this.app.use(express.json());
+    this.app.use(sslRedirect());
   }
 
   routes() {
