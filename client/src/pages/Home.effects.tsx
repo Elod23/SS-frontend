@@ -51,7 +51,8 @@ export const useHomeEffects = () => {
     setStoreId(storeID || "");
   }, [orderID, storeID]);
 
-  const updateTrackingUrl = useCallback( async() => {
+  const updateTrackingUrl = useCallback( async(trackNumber: string) => {
+    if(!trackNumber) throw new Error("Tracking number is not set");
     const result = await axios({
       method: "POST",
       headers: {
@@ -68,7 +69,7 @@ export const useHomeEffects = () => {
           },
           loginToken: loginToken
         },
-        trackingUrl: `https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}`
+        trackingUrl: `https://www.fedex.com/fedextrack/?trknbr=${trackNumber}`
       }
     })
     console.log(result);
@@ -77,7 +78,7 @@ export const useHomeEffects = () => {
     } else {
       setApiError(result.data.errors);
     }
-  }, [authToken, loginToken, orderId, storeId, trackingNumber]);
+  }, [authToken, loginToken, orderId, storeId]);
 
   const fetchDetails = useCallback(
     async (loginToken: string) => {
@@ -202,9 +203,10 @@ export const useHomeEffects = () => {
         console.log(shipment_id, tracking_number, label_download.pdf);
         setShipmentId(shipment_id);
         setTrackingNumber(tracking_number);
+        await updateTrackingUrl(tracking_number);
         setLabels([label_download.pdf!, label_download.png!, label_download.zpl!]);
         setOpenDownload(true);
-        await updateTrackingUrl();
+        
       } else {
         setApiError(result.data.errors);
       }
